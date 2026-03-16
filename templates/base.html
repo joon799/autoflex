@@ -1,0 +1,32 @@
+AUTOFLEX ㈜오토플렉스
+홈 회사소개 제품소개 문의하기
+☰
+홈 회사소개 제품소개 문의하기
+{% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %}
+{{ message }}
+{% endfor %} {% endif %} {% endwith %} {% block content %}{% endblock %}
+AUTOFLEX
+{{ company.slogan }}
+
+실리콘 제품의 모든 것,
+오토플렉스와 함께하세요.
+
+회사 정보
+대표자: {{ company.ceo }}
+
+사업자번호: {{ company.business_no }}
+
+{{ company.address }}
+
+연락처
+📞 {{ company.phone }}
+
+📱 {{ company.mobile }}
+
+✉️ {{ company.email }}
+
+🕐 {{ company.hours }}
+
+바로가기
+홈 회사소개 제품소개 문의하기
+Copyright ⓒ 2026 ㈜오토플렉스 All rights reserved.

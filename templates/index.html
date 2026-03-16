@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}㈜오토플렉스 - 실리콘 제조 생산 전문업체{% endblock %}
+
+{% block content %}
+
+<!-- ===== 히어로 섹션 (메인 배너) ===== -->
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+        <div class="hero-badge">Silicon Manufacturing Expert</div>
+        <h1 class="hero-title">
+            실리콘 제조<br>
+            <span class="accent">생산 전문업체</span>
+        </h1>
+        <p class="hero-sub">기계 금형 기술과 풍부한 생산 경험을 바탕으로<br>최고 품질의 실리콘 제품을 제공합니다</p>
+        <div class="hero-btns">
+            <a href="{{ url_for('products') }}" class="btn btn-primary">제품 보러가기</a>
+            <a href="{{ url_for('contact') }}" class="btn btn-outline">문의하기</a>
+        </div>
+    </div>
+    <div class="hero-scroll">▼ 스크롤</div>
+</section>
+
+<!-- ===== 숫자로 보는 오토플렉스 ===== -->
+<section class="stats">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-num">4</div>
+                <div class="stat-label">제품 라인업</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">100<span>%</span></div>
+                <div class="stat-label">품질 관리</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">5</div>
+                <div class="stat-label">핵심 경쟁력</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">24H</div>
+                <div class="stat-label">고객 대응</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 제품 미리보기 섹션 ===== -->
+<section class="section products-preview">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-tag">PRODUCTS</span>
+            <h2>실리콘 생산제품</h2>
+            <p>Rubber · LSR · FILM · SUS — 4가지 타입으로 다양한 산업 수요를 충족합니다</p>
+        </div>
+        <div class="products-grid">
+            {% for product in products %}
+            <a href="{{ url_for('product_detail', product_id=product.id) }}" class="product-card">
+                <div class="product-icon" style="background: {{ product.color }}20; color: {{ product.color }}">
+                    {{ product.icon }}
+                </div>
+                <div class="product-type">{{ product.type }}</div>
+                <p class="product-desc">{{ product.description[:60] }}...</p>
+                <div class="product-arrow" style="color: {{ product.color }}">자세히 보기 →</div>
+            </a>
+            {% endfor %}
+        </div>
+        <div style="text-align:center; margin-top:40px;">
+            <a href="{{ url_for('products') }}" class="btn btn-primary">전체 제품 보기</a>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 경쟁력 섹션 ===== -->
+<section class="section strengths-section">
+    <div class="container">
+        <div class="section-header light">
+            <span class="section-tag">WHY AUTOFLEX</span>
+            <h2>오토플렉스의 경쟁력</h2>
+            <p>수십 년의 경험과 기술력으로 고객의 신뢰를 쌓아왔습니다</p>
+        </div>
+        <div class="strengths-grid">
+            {% for s in strengths %}
+            <div class="strength-card">
+                <div class="strength-icon">{{ s.icon }}</div>
+                <h3>{{ s.title }}</h3>
+                <p>{{ s.desc }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ===== CTA 섹션 (문의 유도) ===== -->
+<section class="cta-section">
+    <div class="container">
+        <h2>제품 제작이나 문의가 있으신가요?</h2>
+        <p>전화 또는 이메일로 언제든지 연락주세요. 빠르게 답변드리겠습니다.</p>
+        <div class="cta-btns">
+            <a href="tel:{{ company.phone }}" class="btn btn-white">📞 {{ company.phone }}</a>
+            <a href="{{ url_for('contact') }}" class="btn btn-outline-white">온라인 문의</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

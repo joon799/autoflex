@@ -1,0 +1,92 @@
+# ㈜오토플렉스 홈페이지
+
+기계 금형·실리콘 제조 전문업체 오토플렉스의 Flask 홍보 웹사이트입니다.
+
+---
+
+## 📁 파일 구조
+
+```
+autoflex/
+├── app.py                  ← ✅ 메인 파이썬 파일 (여기서 실행!)
+├── requirements.txt        ← 설치할 패키지 목록
+├── templates/              ← HTML 페이지들
+│   ├── base.html           ← 공통 레이아웃 (네비/푸터)
+│   ├── index.html          ← 홈 페이지
+│   ├── about.html          ← 회사소개 페이지
+│   ├── products.html       ← 제품 목록 페이지
+│   ├── product_detail.html ← 제품 상세 페이지
+│   └── contact.html        ← 문의하기 페이지
+└── static/
+    ├── css/style.css       ← 디자인 스타일
+    └── js/main.js          ← 인터랙션 스크립트
+```
+
+---
+
+## 🚀 실행 방법 (처음 설치)
+
+### 1단계: Python 설치 확인
+```bash
+python --version
+# Python 3.8 이상이면 OK
+```
+
+### 2단계: Flask 설치
+```bash
+pip install flask
+```
+또는 requirements.txt로 한번에 설치:
+```bash
+pip install -r requirements.txt
+```
+
+### 3단계: 서버 실행
+```bash
+python app.py
+```
+
+### 4단계: 브라우저에서 접속
+```
+http://localhost:5000
+```
+
+---
+
+## ✏️ 내용 수정 방법
+
+### 회사 정보 변경
+`app.py` 파일을 열어서 `COMPANY` 딕셔너리 수정:
+```python
+COMPANY = {
+    "name": "㈜오토플렉스",     # ← 회사명 변경
+    "phone": "031-959-6031",   # ← 전화번호 변경
+    ...
+}
+```
+
+### 제품 추가/수정
+`app.py` 파일의 `PRODUCTS` 리스트에 추가:
+```python
+{
+    "id": 5,                   # 고유 번호 (기존 번호와 겹치지 않게)
+    "type": "새로운 제품명",
+    "description": "제품 설명",
+    "features": ["특징1", "특징2"],
+    "icon": "🔷",
+    "color": "#3498db",
+},
+```
+
+---
+
+## 📌 자주 묻는 질문
+
+**Q: 포트를 변경하고 싶어요**
+`app.py` 맨 아래 `port=5000`을 원하는 숫자로 변경하세요.
+
+**Q: 실제 서버에 올리고 싶어요**
+`debug=False`로 변경 후 gunicorn 등의 WSGI 서버를 사용하세요.
+
+**Q: 문의 메일을 실제로 받고 싶어요**
+`app.py`의 `contact()` 함수에 `smtplib`으로 이메일 발송 코드를 추가하세요.

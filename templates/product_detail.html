@@ -1,0 +1,21 @@
+{% extends "base.html" %} {% block title %}{{ product.type }} - ㈜오토플렉스{% endblock %} {% block content %}
+PRODUCT DETAIL
+{{ product.icon }} {{ product.type }}
+실리콘 생산제품 상세 정보
+
+{{ product.type }}
+{{ product.description }}
+
+주요 특징
+{% for f in product.features %}
+{{ f }}
+{% endfor %}
+이 제품 문의하기 ← 목록으로
+다른 제품 보기
+{% for p in products %} {% if p.id != product.id %} {{ p.icon }} {{ p.type }} {% endif %} {% endfor %}
+빠른 문의
+📞 {{ company.phone }}
+
+✉️ {{ company.email }}
+
+{% endblock %}

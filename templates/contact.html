@@ -1,0 +1,40 @@
+{% extends "base.html" %} {% block title %}문의하기 - ㈜오토플렉스{% endblock %} {% block content %}
+CONTACT
+문의하기
+궁금한 점이나 제작 의뢰를 남겨주시면 빠르게 답변드리겠습니다
+
+온라인 문의
+이름 / 회사명 * 
+홍길동 / ㈜예시회사
+이메일 * 
+example@email.com
+연락처 
+010-0000-0000
+관심 제품 
+선택해주세요
+문의 내용 * 
+제품 사양, 수량, 납기 등 구체적인 내용을 적어주시면 더욱 빠른 답변이 가능합니다.
+문의 보내기 ✉️
+연락처 정보
+📞
+전화 문의
+{{ company.phone }}
+
+{{ company.mobile }}
+
+✉️
+이메일
+{{ company.email }}
+
+📍
+주소
+{{ company.address_detail }}
+
+🕐
+운영시간
+{{ company.hours }}
+
+주말 및 공휴일 휴무
+
+🗺️ 네이버 지도에서 보기
+{% endblock %}
