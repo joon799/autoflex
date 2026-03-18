@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>주문 상세 - {{ order.order_no }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body style="background:#f4f7fc;font-family:'Noto Sans KR',sans-serif;">
+<header class="admin-header">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:white;letter-spacing:3px;">AUTOFLEX ADMIN</div>
+    <a href="{{ url_for('admin_orders') }}" style="color:#8899bb;font-size:0.85rem;">← 주문 목록으로</a>
+</header>
+<div style="max-width:700px;margin:40px auto;padding:0 24px;">
+    <div style="background:white;border-radius:16px;padding:36px;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;padding-bottom:20px;border-bottom:2px solid #f0f4f8;">
+            <div>
+                <div style="font-size:0.75rem;color:#aaa;margin-bottom:4px;">주문번호</div>
+                <div style="font-size:1.2rem;font-weight:800;color:#e84e1b;">{{ order.order_no }}</div>
+            </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
+            <div>
+                <h4 style="font-size:0.8rem;color:#aaa;margin-bottom:12px;">주문자 정보</h4>
+                <p style="margin-bottom:6px;"><strong>{{ order.name }}</strong></p>
+                <p style="color:#555;font-size:0.9rem;">{{ order.phone }}</p>
+                <p style="color:#555;font-size:0.9rem;">{{ order.email or '-' }}</p>
+            </div>
+            <div>
+                <h4 style="font-size:0.8rem;color:#aaa;margin-bottom:12px;">배송지</h4>
+                <p style="color:#555;font-size:0.9rem;">{{ order.address1 }}</p>
+                <p style="color:#555;font-size:0.9rem;">{{ order.address2 or '' }}</p>
+                <p style="color:#888;font-size:0.82rem;margin-top:6px;">📝 {{ order.memo or '메모 없음' }}</p>
+            </div>
+        </div>
+        <div style="background:#f8fafc;border-radius:10px;padding:20px;margin-bottom:24px;">
+            <h4 style="font-size:0.8rem;color:#aaa;margin-bottom:12px;">주문 상품</h4>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                <span>{{ order.product_name }} × {{ order.quantity }}개</span>
+                <span style="font-weight:600;">{{ "{:,}".format(order.price * order.quantity) }}원</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;color:#888;font-size:0.85rem;margin-bottom:12px;">
+                <span>배송비</span>
+                <span>{% if order.shipping_fee == 0 %}무료{% else %}{{ "{:,}".format(order.shipping_fee) }}원{% endif %}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:1.1rem;font-weight:800;padding-top:12px;border-top:1px solid #e8eef6;color:#e84e1b;">
+                <span>총 결제금액</span>
+                <span>{{ "{:,}".format(order.total_price) }}원</span>
+            </div>
+        </div>
+        <div style="border-top:2px solid #f0f4f8;padding-top:24px;">
+            <h4 style="font-size:0.9rem;font-weight:700;margin-bottom:16px;">주문 상태 변경</h4>
+            <form method="post" action="{{ url_for('update_status', order_id=order.id) }}" style="display:flex;gap:12px;">
+                <select name="status" class="status-select" style="flex:1;padding:12px;">
+                    {% for s in ['입금대기','입금확인','배송중','배송완료','취소'] %}
+                    <option value="{{ s }}" {{ 'selected' if order.status==s }}>{{ s }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-primary">상태 변경</button>
+            </form>
+        </div>
+        <div style="color:#aaa;font-size:0.78rem;margin-top:20px;text-align:right;">주문일시: {{ order.created_at }}</div>
+    </div>
+</div>
+</body>
+</html>

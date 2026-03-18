@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>주문 관리 - 오토플렉스 관리자</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body style="background:#f4f7fc;font-family:'Noto Sans KR',sans-serif;">
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}{% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}{% endif %}
+{% endwith %}
+
+<header class="admin-header">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:white;letter-spacing:3px;">AUTOFLEX ADMIN</div>
+    <nav style="display:flex;gap:20px;align-items:center;">
+        <a href="{{ url_for('admin_orders') }}" style="color:white;font-size:0.85rem;font-weight:600;">📦 주문관리</a>
+        <a href="{{ url_for('admin_contacts') }}" style="color:#8899bb;font-size:0.85rem;">
+            ✉️ 문의관리
+            {% if unread > 0 %}<span style="background:#e84e1b;color:white;border-radius:100px;padding:2px 8px;font-size:0.72rem;margin-left:4px;">{{ unread }}</span>{% endif %}
+        </a>
+        <a href="{{ url_for('index') }}" style="color:#8899bb;font-size:0.85rem;">홈으로</a>
+        <a href="{{ url_for('admin_logout') }}" style="color:#e84e1b;font-size:0.85rem;">로그아웃</a>
+    </nav>
+</header>
+
+<div class="admin-body">
+    <!-- 통계 카드 -->
+    <div class="admin-stats">
+        {% for label, val, color in [('전체 주문', stats.total, '#0a1628'), ('입금대기', stats.pending, '#f39c12'), ('입금확인', stats.confirmed, '#2980b9'), ('배송중', stats.shipping, '#8e44ad'), ('배송완료', stats.done, '#27ae60')] %}
+        <div class="admin-stat-card" style="border-top-color:{{ color }}">
+            <div class="asc-label">{{ label }}</div>
+            <div class="asc-num" style="color:{{ color }}">{{ val or 0 }}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- 총 매출 -->
+    <div class="revenue-bar">
+        <span>총 매출액</span>
+        <span class="revenue-num">{{ "{:,}".format(stats.revenue or 0) }}원</span>
+    </div>
+
+    <!-- 상태 필터 -->
+    <div class="filter-bar">
+        {% for s in ['전체','입금대기','입금확인','배송중','배송완료','취소'] %}
+        <a href="?status={{ s }}" class="filter-btn {{ 'active' if status_filter==s }}">{{ s }}</a>
+        {% endfor %}
+    </div>
+
+    <!-- 주문 테이블 -->
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>주문번호</th><th>주문일시</th><th>주문자</th>
+                    <th>상품명</th><th>수량</th><th>금액</th><th>상태</th><th>변경</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if orders %}
+                {% for o in orders %}
+                {% set sc = {'입금대기':'#f39c12','입금확인':'#2980b9','배송중':'#8e44ad','배송완료':'#27ae60','취소':'#e74c3c'} %}
+                <tr>
+                    <td><a href="{{ url_for('admin_order_detail', order_id=o.id) }}" style="color:#e84e1b;font-weight:600;font-size:0.8rem;">{{ o.order_no }}</a></td>
+                    <td style="color:#888;font-size:0.8rem;">{{ o.created_at[:16] }}</td>
+                    <td><strong>{{ o.name }}</strong><br><span style="color:#aaa;font-size:0.78rem;">{{ o.phone }}</span></td>
+                    <td>{{ o.product_name }}</td>
+                    <td style="text-align:center;">{{ o.quantity }}개</td>
+                    <td style="text-align:right;font-weight:700;">{{ "{:,}".format(o.total_price) }}원</td>
+                    <td style="text-align:center;">
+                        <span class="status-badge" style="background:{{ sc.get(o.status,'#ccc') }}20;color:{{ sc.get(o.status,'#ccc') }};">{{ o.status }}</span>
+                    </td>
+                    <td>
+                        <form method="post" action="{{ url_for('update_status', order_id=o.id) }}" style="display:flex;gap:4px;">
+                            <select name="status" class="status-select">
+                                {% for s in ['입금대기','입금확인','배송중','배송완료','취소'] %}
+                                <option value="{{ s }}" {{ 'selected' if o.status==s }}>{{ s }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="status-btn">변경</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="8" style="padding:60px;text-align:center;color:#aaa;">주문이 없습니다.</td></tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

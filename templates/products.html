@@ -1,20 +1,46 @@
-{% extends "base.html" %} {% block title %}제품소개 - ㈜오토플렉스{% endblock %} {% block content %}
-PRODUCTS
-실리콘 생산제품
-Rubber · LSR · FILM · SUS 4가지 타입의 실리콘 제품을 생산합니다
-
-{% for product in products %}
-{{ product.icon }}
-{{ product.type }}
-{{ product.description }}
-
-{% for f in product.features %}
-{{ f }}
-{% endfor %}
-상세 정보 →
-{% endfor %}
-원하시는 제품이 없으신가요?
-맞춤 제작 문의도 가능합니다. 요구사항을 알려주시면 최적의 솔루션을 제안해 드립니다.
-
-맞춤 제작 문의하기
+{% extends "base.html" %}
+{% block title %}제품소개 - ㈜오토플렉스{% endblock %}
+{% block content %}
+<div class="page-hero">
+    <div class="container">
+        <span class="section-tag">PRODUCTS</span>
+        <h1>실리콘 생산제품</h1>
+        <p>Rubber · LSR · FILM · SUS 4가지 타입의 실리콘 제품을 생산합니다</p>
+    </div>
+</div>
+<section class="section">
+    <div class="container">
+        <div class="products-full-grid">
+            {% for p in product_lines %}
+            <div class="product-full-card">
+                <div class="pfc-left" style="border-color:{{ p.color }}">
+                    <div class="pfc-icon" style="background:{{ p.color }}">{{ p.icon }}</div>
+                    <div class="pfc-type" style="color:{{ p.color }}">{{ p.type }}</div>
+                </div>
+                <div class="pfc-right">
+                    <p>{{ p.description }}</p>
+                    <ul class="feature-list">
+                        {% for f in p.features %}
+                        <li style="--dot-color:{{ p.color }}">{{ f }}</li>
+                        {% endfor %}
+                    </ul>
+                    <a href="{{ url_for('shop') }}" class="btn btn-sm" style="background:{{ p.color }};color:white;border:none;">
+                        구매하기 →
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<section class="cta-section">
+    <div class="container">
+        <h2>맞춤 제작 문의도 가능합니다</h2>
+        <p>요구사항을 알려주시면 최적의 솔루션을 제안해 드립니다.</p>
+        <div class="cta-btns">
+            <a href="{{ url_for('contact') }}" class="btn btn-white">문의하기</a>
+            <a href="{{ url_for('shop') }}" class="btn btn-outline-white">🛒 쇼핑몰 바로가기</a>
+        </div>
+    </div>
+</section>
 {% endblock %}

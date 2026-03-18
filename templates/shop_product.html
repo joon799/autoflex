@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} - 오토플렉스 쇼핑몰{% endblock %}
+{% block content %}
+<div class="container order-wrap">
+    <div class="order-layout">
+        <!-- 상품 정보 -->
+        <div class="product-detail-card">
+            <div class="pd-thumb">{{ product.icon }}</div>
+            <h2>{{ product.name }}</h2>
+            <p class="pd-desc">{{ product.description }}</p>
+            <ul class="pd-features">
+                {% for f in product.detail.split(',') %}
+                <li>✔ {{ f.strip() }}</li>
+                {% endfor %}
+            </ul>
+            <div class="pd-price-wrap">
+                <div class="pd-price">{{ "{:,}".format(product.price) }}원</div>
+                <div class="pd-ship">
+                    {% if product.shipping_fee == 0 %}<span class="free-ship">배송비 무료</span>
+                    {% else %}+ 배송비 {{ "{:,}".format(product.shipping_fee) }}원{% endif %}
+                </div>
+            </div>
+            <div class="pd-stock">재고: {{ product.stock }}개</div>
+        </div>
+
+        <!-- 주문 폼 -->
+        <div class="order-form-wrap">
+            <h3>📋 주문서 작성</h3>
+            <form action="{{ url_for('shop_order') }}" method="post" class="order-form" id="orderForm">
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <fieldset>
+                    <legend>주문자 정보</legend>
+                    <div class="form-group"><label>이름 *</label><input type="text" name="name" placeholder="홍길동" required></div>
+                    <div class="form-group"><label>연락처 *</label><input type="tel" name="phone" placeholder="010-0000-0000" required></div>
+                    <div class="form-group"><label>이메일</label><input type="email" name="email" placeholder="example@email.com"></div>
+                </fieldset>
+                <fieldset>
+                    <legend>배송지 정보</legend>
+                    <div class="form-group">
+                        <label>우편번호</label>
+                        <div style="display:flex;gap:8px;">
+                            <input type="text" name="zipcode" id="zipcode" placeholder="우편번호" style="flex:1">
+                            <button type="button" class="btn btn-outline btn-sm" onclick="searchAddress()">주소검색</button>
+                        </div>
+                    </div>
+                    <div class="form-group"><label>기본 주소 *</label><input type="text" name="address1" id="address1" placeholder="도로명 주소" required></div>
+                    <div class="form-group"><label>상세 주소</label><input type="text" name="address2" placeholder="동/호수 등"></div>
+                    <div class="form-group">
+                        <label>배송 메모</label>
+                        <select name="memo">
+                            <option value="">선택해주세요</option>
+                            <option>문 앞에 놓아주세요</option>
+                            <option>경비실에 맡겨주세요</option>
+                            <option>부재 시 연락주세요</option>
+                        </select>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>수량 및 결제</legend>
+                    <div class="form-group">
+                        <label>수량 *</label>
+                        <div class="qty-wrap">
+                            <button type="button" onclick="changeQty(-1)">−</button>
+                            <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ product.stock }}" readonly>
+                            <button type="button" onclick="changeQty(1)">+</button>
+                        </div>
+                    </div>
+                    <div class="price-summary">
+                        <div class="ps-row"><span>상품금액</span><span id="productTotal">{{ "{:,}".format(product.price) }}원</span></div>
+                        <div class="ps-row"><span>배송비</span><span>{% if product.shipping_fee == 0 %}무료{% else %}{{ "{:,}".format(product.shipping_fee) }}원{% endif %}</span></div>
+                        <div class="ps-row total"><span>총 결제금액</span><span id="totalPrice">{{ "{:,}".format(product.price + product.shipping_fee) }}원</span></div>
+                    </div>
+                </fieldset>
+                <div class="bank-notice">
+                    <h4>🏦 무통장 입금 안내</h4>
+                    <p><strong>{{ config.bank_name }}</strong> {{ config.bank_account }}</p>
+                    <p>예금주: {{ config.bank_holder }}</p>
+                    <p class="notice-sub">주문자 이름으로 입금해 주세요. 입금 확인 후 배송이 시작됩니다.</p>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full" id="submitBtn">주문 완료하기</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    const unitPrice = {{ product.price }};
+    const shippingFee = {{ product.shipping_fee }};
+    function changeQty(d) {
+        const input = document.getElementById('quantity');
+        let val = parseInt(input.value) + d;
+        val = Math.max(1, Math.min({{ product.stock }}, val));
+        input.value = val;
+        document.getElementById('productTotal').textContent = (unitPrice * val).toLocaleString() + '원';
+        document.getElementById('totalPrice').textContent = (unitPrice * val + shippingFee).toLocaleString() + '원';
+    }
+    function searchAddress() {
+        new daum.Postcode({ oncomplete: function(data) {
+            document.getElementById('zipcode').value = data.zonecode;
+            document.getElementById('address1').value = data.roadAddress;
+        }}).open();
+    }
+    document.getElementById('orderForm').addEventListener('submit', function() {
+        document.getElementById('submitBtn').disabled = true;
+        document.getElementById('submitBtn').textContent = '처리 중...';
+    });
+</script>
+{% endblock %}

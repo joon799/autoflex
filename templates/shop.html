@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}쇼핑몰 - ㈜오토플렉스{% endblock %}
+{% block content %}
+<div class="page-hero">
+    <div class="container">
+        <span class="section-tag">ONLINE SHOP</span>
+        <h1>오토플렉스 공식 쇼핑몰</h1>
+        <p>실리콘 제조 전문업체의 공식 제품을 온라인으로 구매하세요</p>
+    </div>
+</div>
+<section class="section">
+    <div class="container">
+        <div class="shop-grid">
+            {% for p in shop_products %}
+            <div class="shop-card">
+                <div class="shop-thumb">{{ p.icon }}</div>
+                <div class="shop-info">
+                    <h3>{{ p.name }}</h3>
+                    <p>{{ p.description }}</p>
+                    <div class="shop-bottom">
+                        <div>
+                            <div class="shop-price">{{ "{:,}".format(p.price) }}원</div>
+                            <div class="shop-ship">
+                                {% if p.shipping_fee == 0 %}<span class="free-ship">배송비 무료</span>
+                                {% else %}배송비 {{ "{:,}".format(p.shipping_fee) }}원{% endif %}
+                            </div>
+                        </div>
+                        {% if p.stock > 0 %}
+                        <a href="{{ url_for('shop_product', product_id=p.id) }}" class="btn btn-primary btn-sm">주문하기</a>
+                        {% else %}
+                        <span class="sold-out">품절</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<div class="bank-banner">
+    <div class="container">
+        <div class="bank-info-bar">
+            <span>🏦</span>
+            <div><strong>무통장 입금 안내</strong><p>{{ config.bank_name }} {{ config.bank_account }} (예금주: {{ config.bank_holder }})</p></div>
+        </div>
+    </div>
+</div>
+{% endblock %}

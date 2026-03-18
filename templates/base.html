@@ -1,32 +1,85 @@
-AUTOFLEX ㈜오토플렉스
-홈 회사소개 제품소개 문의하기
-☰
-홈 회사소개 제품소개 문의하기
-{% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %}
-{{ message }}
-{% endfor %} {% endif %} {% endwith %} {% block content %}{% endblock %}
-AUTOFLEX
-{{ company.slogan }}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}㈜오토플렉스 - 실리콘 제조 생산 전문업체{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
 
-실리콘 제품의 모든 것,
-오토플렉스와 함께하세요.
+<!-- 네비게이션 -->
+<header class="navbar">
+    <div class="container">
+        <a href="{{ url_for('index') }}" class="logo">
+            <span class="logo-en">AUTOFLEX</span>
+            <span class="logo-kr">㈜오토플렉스</span>
+        </a>
+        <nav class="nav-links">
+            <a href="{{ url_for('index') }}">홈</a>
+            <a href="{{ url_for('about') }}">회사소개</a>
+            <a href="{{ url_for('products') }}">제품소개</a>
+            <a href="{{ url_for('shop') }}" class="shop-link">🛒 쇼핑몰</a>
+            <a href="{{ url_for('contact') }}">문의하기</a>
+        </nav>
+        <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="{{ url_for('index') }}">홈</a>
+        <a href="{{ url_for('about') }}">회사소개</a>
+        <a href="{{ url_for('products') }}">제품소개</a>
+        <a href="{{ url_for('shop') }}">🛒 쇼핑몰</a>
+        <a href="{{ url_for('contact') }}">문의하기</a>
+    </div>
+</header>
 
-회사 정보
-대표자: {{ company.ceo }}
+<!-- 알림 메시지 -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}{% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}{% endif %}
+{% endwith %}
 
-사업자번호: {{ company.business_no }}
+<!-- 페이지 내용 -->
+{% block content %}{% endblock %}
 
-{{ company.address }}
+<!-- 푸터 -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="footer-logo">AUTOFLEX</div>
+                <p>{{ company.slogan if company is defined else '실리콘 제조 생산 전문업체' }}</p>
+            </div>
+            <div class="footer-info">
+                <h4>회사 정보</h4>
+                <p>대표자: {{ company.ceo if company is defined else '허남혁' }}</p>
+                <p>사업자번호: {{ company.business_no if company is defined else '141-81-06639' }}</p>
+                <p>{{ company.address if company is defined else '경기도 파주시 자운서원로410-11' }}</p>
+            </div>
+            <div class="footer-contact">
+                <h4>연락처</h4>
+                <p>📞 031-959-6031</p>
+                <p>✉️ autoflex@autoflex.kr</p>
+                <p>🕐 평일 09:30 - 17:00</p>
+            </div>
+            <div class="footer-links">
+                <h4>바로가기</h4>
+                <a href="{{ url_for('index') }}">홈</a>
+                <a href="{{ url_for('about') }}">회사소개</a>
+                <a href="{{ url_for('products') }}">제품소개</a>
+                <a href="{{ url_for('shop') }}">쇼핑몰</a>
+                <a href="{{ url_for('contact') }}">문의하기</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright ⓒ 2026 ㈜오토플렉스 All rights reserved.</p>
+        </div>
+    </div>
+</footer>
 
-연락처
-📞 {{ company.phone }}
-
-📱 {{ company.mobile }}
-
-✉️ {{ company.email }}
-
-🕐 {{ company.hours }}
-
-바로가기
-홈 회사소개 제품소개 문의하기
-Copyright ⓒ 2026 ㈜오토플렉스 All rights reserved.
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

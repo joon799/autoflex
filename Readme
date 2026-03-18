@@ -90,3 +90,103 @@ COMPANY = {
 
 **Q: 문의 메일을 실제로 받고 싶어요**
 `app.py`의 `contact()` 함수에 `smtplib`으로 이메일 발송 코드를 추가하세요.
+
+
+# Autoflex Website
+
+Company promotion + Online shop + Admin dashboard built with Flask.
+
+---
+
+## Requirements
+
+- Python 3.8+
+- Flask
+
+---
+
+## Setup & Run
+
+**1. Create virtual environment**
+```bash
+python3 -m venv venv
+```
+
+**2. Activate virtual environment**
+```bash
+source venv/bin/activate
+```
+> You'll see `(venv)` appear at the start of your terminal line.
+
+**3. Install dependencies**
+```bash
+pip install flask
+```
+
+**4. Run the server**
+```bash
+python app.py
+```
+
+**5. Open in browser**
+```
+http://localhost:5000        → Main site
+http://localhost:5000/shop   → Shop
+http://localhost:5000/admin  → Admin page
+```
+
+---
+
+## Every time you start
+
+```bash
+source venv/bin/activate   # activate venv first
+python app.py              # then run
+```
+
+**To deactivate venv:**
+```bash
+deactivate
+```
+
+---
+
+## Push to GitHub
+
+```bash
+git add .
+git commit -m "your message"
+git push
+```
+
+---
+
+## Project Structure
+
+```
+autoflex/
+├── app.py              ← Main server file (edit company info & products here)
+├── orders.db           ← Database (auto-created on first run)
+├── requirements.txt
+├── templates/          ← HTML pages
+└── static/
+    ├── css/style.css
+    └── js/main.js
+```
+
+---
+
+## Configuration (app.py)
+
+Edit the `CONFIG` and `SHOP_PRODUCTS` section at the top of `app.py`:
+
+```python
+CONFIG = {
+    "admin_id": "admin",          # admin login ID
+    "admin_pw": "autoflex1234",   # admin login PW  ← change this!
+    "bank_name": "국민은행",
+    "bank_account": "123-456-789012",  # ← your real account number
+    "email_sender": "your@gmail.com",  # ← your Gmail
+    "email_password": "xxxx xxxx",     # ← Gmail app password
+}
+```

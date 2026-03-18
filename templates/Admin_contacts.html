@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>문의 관리 - 오토플렉스 관리자</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body style="background:#f4f7fc;font-family:'Noto Sans KR',sans-serif;">
+<header class="admin-header">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:white;letter-spacing:3px;">AUTOFLEX ADMIN</div>
+    <nav style="display:flex;gap:20px;align-items:center;">
+        <a href="{{ url_for('admin_orders') }}" style="color:#8899bb;font-size:0.85rem;">📦 주문관리</a>
+        <a href="{{ url_for('admin_contacts') }}" style="color:white;font-size:0.85rem;font-weight:600;">✉️ 문의관리</a>
+        <a href="{{ url_for('admin_logout') }}" style="color:#e84e1b;font-size:0.85rem;">로그아웃</a>
+    </nav>
+</header>
+<div class="admin-body">
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr><th>접수일시</th><th>이름</th><th>이메일</th><th>연락처</th><th>관심 제품</th><th>문의 내용</th></tr>
+            </thead>
+            <tbody>
+            {% if contacts %}
+                {% for c in contacts %}
+                <tr>
+                    <td style="font-size:0.8rem;color:#888;">{{ c.created_at[:16] }}</td>
+                    <td><strong>{{ c.name }}</strong></td>
+                    <td style="font-size:0.85rem;">{{ c.email }}</td>
+                    <td style="font-size:0.85rem;">{{ c.phone or '-' }}</td>
+                    <td><span style="background:#e8f0fe;color:#2980b9;padding:3px 10px;border-radius:100px;font-size:0.78rem;">{{ c.product or '-' }}</span></td>
+                    <td style="max-width:300px;font-size:0.85rem;color:#555;">{{ c.message[:80] }}{% if c.message|length > 80 %}...{% endif %}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="6" style="padding:60px;text-align:center;color:#aaa;">문의가 없습니다.</td></tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
